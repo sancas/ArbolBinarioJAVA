@@ -5,17 +5,55 @@
  */
 package arbolbinario;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.LinkedList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Usuario
  */
 public class Frame extends javax.swing.JFrame {
+    
+    ArbolBinario ab = new ArbolBinario();
 
     /**
      * Creates new form Frame
      */
     public Frame() {
         initComponents();
+        this.setLocationRelativeTo(null);
+    }
+    
+    private void pintaArbol (Graphics g, Nodo n, int x, int y, int xoff, int yoff, int nivel) {
+        if (n == null) return;
+        g.setColor(Color.blue);
+        if (n.getIzq() != null) {
+            g.drawLine(x, y, x - xoff + (nivel*2) , y + yoff);
+        }
+        
+        if (n.getDer() != null) {
+            g.drawLine(x, y, x + xoff - (nivel*2), y + yoff);
+        }
+        
+        g.fillOval(x-10, y-20, 30, 30);
+        
+        g.setColor(Color.white);
+        g.drawString(n.getDato() + "", x, y);
+        
+        pintaArbol(g, n.getIzq(), (int)(x - xoff), (y + yoff), xoff + nivel * 2, yoff, nivel + 1);
+        pintaArbol(g, n.getDer(), (int)(x + xoff), (y + yoff), xoff - nivel * 2, yoff, nivel + 1);
+    }
+    
+    @Override
+    public void paint(Graphics g) {
+        jPizarra.revalidate();
+        super.paint(g);
+        int X = (getWidth()/5) * ab.getAltura();
+        int X2 = (getWidth()/12);
+        int Y = getHeight()/12;
+        pintaArbol(jPizarra.getGraphics(), ab.getRaiz(), jPizarra.getWidth() / 2, Y, X2, Y, 1);
     }
 
     /**
@@ -27,48 +65,88 @@ public class Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPizarra = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTxtField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        txtOut = new javax.swing.JTextArea();
+        txtNum = new javax.swing.JTextField();
+        btnAddNode = new javax.swing.JButton();
+        btnDelArbol = new javax.swing.JButton();
+        btnPreOrden = new javax.swing.JButton();
+        btnInOrden = new javax.swing.JButton();
+        btnPostOrden = new javax.swing.JButton();
+        btnPerLevel = new javax.swing.JButton();
+        btnSearchNode = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Recorrido de Arboles Binarios");
+        setPreferredSize(new java.awt.Dimension(1071, 655));
+        setResizable(false);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPizarra.setPreferredSize(new java.awt.Dimension(861, 478));
+
+        javax.swing.GroupLayout jPizarraLayout = new javax.swing.GroupLayout(jPizarra);
+        jPizarra.setLayout(jPizarraLayout);
+        jPizarraLayout.setHorizontalGroup(
+            jPizarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPizarraLayout.setVerticalGroup(
+            jPizarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtOut.setColumns(20);
+        txtOut.setRows(5);
+        jScrollPane1.setViewportView(txtOut);
 
-        jButton1.setText("jButton1");
+        btnAddNode.setText("Agregar Nodo");
+        btnAddNode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNodeActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("jButton2");
+        btnDelArbol.setText("Eliminar Arbol");
+        btnDelArbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelArbolActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("jButton3");
+        btnPreOrden.setText("Pre-orden");
+        btnPreOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreOrdenActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("jButton4");
+        btnInOrden.setText("In-orden");
+        btnInOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInOrdenActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("jButton5");
+        btnPostOrden.setText("Post-orden");
+        btnPostOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPostOrdenActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("jButton6");
+        btnPerLevel.setText("Por nivel");
+        btnPerLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPerLevelActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("jButton7");
+        btnSearchNode.setText("Buscar Dato");
+        btnSearchNode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchNodeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,18 +155,18 @@ public class Frame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(jPizarra, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTxtField))
+                    .addComponent(btnAddNode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDelArbol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPostOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPerLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSearchNode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPreOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnInOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtNum))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -97,31 +175,108 @@ public class Frame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPizarra, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(btnAddNode)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(btnDelArbol)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
+                        .addComponent(btnPreOrden)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4)
+                        .addComponent(btnInOrden)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton5)
+                        .addComponent(btnPostOrden)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton6)
+                        .addComponent(btnPerLevel)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton7)
+                        .addComponent(btnSearchNode)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNodeActionPerformed
+        // TODO add your handling code here:
+        try {
+            int dato = Integer.parseInt(txtNum.getText());
+            txtNum.setText("");
+            ab.insertar(dato);
+            paint(jPizarra.getGraphics());
+        } catch (Exception e) {
+            JOptionPane.showConfirmDialog(this, "Error al Insertar el Dato");
+        }
+    }//GEN-LAST:event_btnAddNodeActionPerformed
+
+    private void btnDelArbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelArbolActionPerformed
+        // TODO add your handling code here:
+        ab = null;
+        ab = new ArbolBinario();
+        paint(jPizarra.getGraphics());
+    }//GEN-LAST:event_btnDelArbolActionPerformed
+
+    private void btnPreOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreOrdenActionPerformed
+        // TODO add your handling code here:
+        LinkedList rec = new LinkedList();
+        ab.preorden(ab.getRaiz(), rec);
+        String cad = "Recorrido Preorden:\n";
+        for (Object rec1 : rec)
+        {
+            cad += rec1 + "     ";
+        }
+        txtOut.setText(cad);
+    }//GEN-LAST:event_btnPreOrdenActionPerformed
+
+    private void btnInOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInOrdenActionPerformed
+        // TODO add your handling code here:
+        LinkedList rec = new LinkedList();
+        ab.inorden(ab.getRaiz(), rec);
+        String cad = "Recorrido Inorden:\n";
+        for (Object rec1 : rec)
+        {
+            cad += rec1 + "     ";
+        }
+        txtOut.setText(cad);
+    }//GEN-LAST:event_btnInOrdenActionPerformed
+
+    private void btnPostOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPostOrdenActionPerformed
+        // TODO add your handling code here:
+        LinkedList rec = new LinkedList();
+        ab.postorden(ab.getRaiz(), rec);
+        String cad = "Recorrido Postorden:\n";
+        for (Object rec1 : rec)
+        {
+            cad += rec1 + "     ";
+        }
+        txtOut.setText(cad);
+    }//GEN-LAST:event_btnPostOrdenActionPerformed
+
+    private void btnPerLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerLevelActionPerformed
+        // TODO add your handling code here:
+        LinkedList rec = new LinkedList();
+        ab.porNivel(ab.getRaiz(), rec);
+        String cad = "Recorrido Pornivel:\n";
+        for (Object rec1 : rec)
+        {
+            cad += rec1 + "     ";
+        }
+        txtOut.setText(cad);
+    }//GEN-LAST:event_btnPerLevelActionPerformed
+
+    private void btnSearchNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchNodeActionPerformed
+        // TODO add your handling code here:
+        try {
+            int dato = Integer.parseInt(JOptionPane.showInputDialog(this, "Dato a buscar"));
+            JOptionPane.showConfirmDialog(this, ab.existe(dato)? "Si este el Dato":"No existe el dato");
+        } catch (Exception e) {
+            JOptionPane.showConfirmDialog(this, "Error al buscar el dato");
+        }
+    }//GEN-LAST:event_btnSearchNodeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -159,16 +314,16 @@ public class Frame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnAddNode;
+    private javax.swing.JButton btnDelArbol;
+    private javax.swing.JButton btnInOrden;
+    private javax.swing.JButton btnPerLevel;
+    private javax.swing.JButton btnPostOrden;
+    private javax.swing.JButton btnPreOrden;
+    private javax.swing.JButton btnSearchNode;
+    private javax.swing.JPanel jPizarra;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTxtField;
+    private javax.swing.JTextField txtNum;
+    private javax.swing.JTextArea txtOut;
     // End of variables declaration//GEN-END:variables
 }

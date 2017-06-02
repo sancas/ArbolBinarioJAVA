@@ -22,7 +22,7 @@ public class ArbolBinario {
         alt = 0;
     }
     
-    public void insetar(int dato) {
+    public void insertar(int dato) {
         if (existe(dato)) return;
         Nodo nuevo = new Nodo(dato);
         if (raiz == null)
@@ -64,6 +64,15 @@ public class ArbolBinario {
         {
             recorrido.add(aux.getDato());
             preorden(aux.getIzq(), recorrido);
+            preorden(aux.getDer(), recorrido);
+        }
+    }
+    
+    public void inorden(Nodo aux, LinkedList recorrido) {
+        if (aux != null)
+        {
+            preorden(aux.getIzq(), recorrido);
+            recorrido.add(aux.getDato());
             preorden(aux.getDer(), recorrido);
         }
     }
